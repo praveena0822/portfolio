@@ -1,0 +1,91 @@
+// Field definitions that drive the generic admin CRUD screens.
+// type: text | textarea | number | checkbox | select | url | list (list: sep is "\n" or ",")
+export const RESOURCES = {
+  experience: {
+    label: 'Experience',
+    singular: 'experience entry',
+    endpoint: '/experience',
+    title: (r) => r.role,
+    subtitle: (r) => `${r.organization} · ${r.duration}`,
+    fields: [
+      { name: 'role', label: 'Role', type: 'text', required: true, max: 160 },
+      { name: 'organization', label: 'Company or organization', type: 'text', required: true, max: 200 },
+      { name: 'location', label: 'Location', type: 'text', max: 120 },
+      { name: 'duration', label: 'Duration', type: 'text', required: true, max: 80, placeholder: 'e.g. July 2007 – Present' },
+      { name: 'current', label: 'This is my current role', type: 'checkbox' },
+      { name: 'bullets', label: 'Achievement bullets', type: 'list', sep: '\n', rows: 5, help: 'One bullet per line (up to 8). Only include results you can support.' },
+      { name: 'order', label: 'Display order', type: 'number', help: 'Lower numbers appear first.' },
+    ],
+  },
+  projects: {
+    label: 'Projects & Publications',
+    singular: 'project or publication',
+    endpoint: '/projects',
+    title: (r) => r.title,
+    subtitle: (r) => [r.type === 'publication' ? 'Publication' : 'Project', r.year].filter(Boolean).join(' · '),
+    fields: [
+      { name: 'type', label: 'Type', type: 'select', options: [['publication', 'Publication'], ['project', 'Project']] },
+      { name: 'title', label: 'Title', type: 'text', required: true, max: 300 },
+      { name: 'venue', label: 'Journal, conference or context', type: 'text', max: 300 },
+      { name: 'year', label: 'Year', type: 'text', max: 20 },
+      { name: 'authors', label: 'Authors', type: 'text', max: 400 },
+      { name: 'summary', label: 'Problem and solution summary', type: 'textarea', rows: 3, max: 1200 },
+      { name: 'contribution', label: 'My contribution', type: 'textarea', rows: 2, max: 800 },
+      { name: 'technologies', label: 'Technologies or topics', type: 'list', sep: ',', help: 'Separate with commas.' },
+      { name: 'link', label: 'Paper or DOI link', type: 'url' },
+      { name: 'repoUrl', label: 'GitHub repository URL', type: 'url', help: 'Leave empty if there is no public repository.' },
+      { name: 'liveUrl', label: 'Live demo URL', type: 'url', help: 'Leave empty unless the project is actually deployed.' },
+      { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
+  skills: {
+    label: 'Skills',
+    singular: 'skill',
+    endpoint: '/skills',
+    title: (r) => r.name,
+    subtitle: (r) => r.category,
+    fields: [
+      { name: 'category', label: 'Category', type: 'text', required: true, max: 80, placeholder: 'e.g. Programming Languages' },
+      { name: 'name', label: 'Skill', type: 'text', required: true, max: 80 },
+      { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
+  education: {
+    label: 'Education',
+    singular: 'education entry',
+    endpoint: '/education',
+    title: (r) => `${r.degree}${r.specialization ? `, ${r.specialization}` : ''}`,
+    subtitle: (r) => [r.institution || r.university, r.duration].filter(Boolean).join(' · '),
+    fields: [
+      { name: 'degree', label: 'Degree', type: 'text', required: true, max: 160 },
+      { name: 'specialization', label: 'Department or specialization', type: 'text', max: 160 },
+      { name: 'institution', label: 'College', type: 'text', max: 240 },
+      { name: 'university', label: 'University', type: 'text', max: 240 },
+      { name: 'duration', label: 'Study duration', type: 'text', max: 80, placeholder: 'e.g. 1997 – 1999' },
+      { name: 'grade', label: 'CGPA or percentage', type: 'text', max: 60, help: 'Leave empty if you do not want to show it.' },
+      { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
+  certifications: {
+    label: 'Certifications',
+    singular: 'certification or achievement',
+    endpoint: '/certifications',
+    title: (r) => r.title,
+    subtitle: (r) => [r.kind, r.issuer, r.date].filter(Boolean).join(' · '),
+    fields: [
+      { name: 'kind', label: 'Type', type: 'select', options: [['certification', 'Certification'], ['achievement', 'Achievement'], ['award', 'Award'], ['workshop', 'Workshop']] },
+      { name: 'title', label: 'Title', type: 'text', required: true, max: 200 },
+      { name: 'issuer', label: 'Issuing organization', type: 'text', max: 200 },
+      { name: 'date', label: 'Date', type: 'text', max: 60 },
+      { name: 'description', label: 'Description', type: 'textarea', rows: 2, max: 600 },
+      { name: 'credentialUrl', label: 'Credential link', type: 'url' },
+      { name: 'order', label: 'Display order', type: 'number' },
+    ],
+  },
+};
+
+export const ADMIN_SECTIONS = [
+  { id: 'profile', label: 'Profile' },
+  ...Object.entries(RESOURCES).map(([id, r]) => ({ id, label: r.label })),
+  { id: 'messages', label: 'Messages' },
+];
